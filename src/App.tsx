@@ -1241,5 +1241,5 @@ function Step5({ kitchen = [], selectedKitchen, onSelectKitchen }: Step5Props) {
 }
 
 function Step6() {
-  return <div>Step 6 Code</div>;
+  return <div>toal : -</div>;
 }
