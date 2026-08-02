@@ -11,6 +11,7 @@ type AduSize = {
   id: number;
   size: string;
   price: string;
+  priceAmount: number;
 };
 
 type Step1Props = {
@@ -24,6 +25,7 @@ type RoofType = {
   name: string;
   price: string;
   image: string;
+  priceAmount: number;
 };
 
 type Step2Props = {
@@ -89,6 +91,22 @@ type Step3Props = {
   onAppliancePackageChange: (value: boolean) => void;
 };
 
+type Step6Props = {
+  aduSizePrice: number;
+  roofStylePrice: number;
+  heightPrice: number;
+  roofOptionPrice: number;
+  exteriorPrice: number;
+  appliancePrice: number;
+  skylightPrice: number;
+  windowCountPrice: number;
+  paintPrice: number;
+  flooringPrice: number;
+  bathroomPrice: number;
+  curtainPrice: number;
+  kitchenPrice: number;
+};
+
 export default function App() {
   const [step, setStep] = useState(1);
   const [selected, setSelected] = useState(3);
@@ -143,16 +161,19 @@ export default function App() {
       id: 1,
       size: "560 sqft",
       price: "$212,800",
+      priceAmount: 212800,
     },
     {
       id: 2,
       size: "640 sqft",
       price: "$243,200",
+      priceAmount: 243200,
     },
     {
       id: 3,
       size: "740 sqft",
       price: "$273,800",
+      priceAmount: 273800,
     },
   ];
 
@@ -161,6 +182,7 @@ export default function App() {
       id: 1,
       name: "Gable",
       price: "$0",
+      priceAmount: 0,
       image:
         "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600",
     },
@@ -168,6 +190,7 @@ export default function App() {
       id: 2,
       name: "Shed",
       price: "$7,500",
+      priceAmount: 7500,
       image:
         "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600",
     },
@@ -267,6 +290,30 @@ export default function App() {
       price: 4000,
     },
   ];
+
+  const aduSizePrice =
+    aduSizes.find((item) => item.id === selected)?.priceAmount ?? 0;
+  const roofStylePrice =
+    roofTypes.find((item) => item.name === selectedRoof)?.priceAmount ?? 0;
+  const heightPrice =
+    heights.find((item) => item.id === selectedHeight)?.price ?? 0;
+  const roofOptionPrice =
+    roofs.find((item) => item.id === selectedRoofOption)?.price ?? 0;
+  const exteriorPrice =
+    exteriors.find((item) => item.id === selectedExterior)?.price ?? 0;
+  const appliancePrice = appliancePackage ? 5000 : 0;
+  const skylightPrice = skylights * 2500;
+  const windowCountPrice = Math.max(0, (windowCount - 4) * 2000);
+  const paintPrice =
+    paint.find((item) => item.id === selectedPaint)?.price ?? 0;
+  const flooringPrice =
+    flooring.find((item) => item.id === selectedFlooring)?.price ?? 0;
+  const bathroomPrice =
+    bathroom.find((item) => item.id === selectedBathroom)?.price ?? 0;
+  const curtainPrice =
+    curtain.find((item) => item.id === selectedCurtain)?.price ?? 0;
+  const kitchenPrice =
+    kitchen.find((item) => item.id === selectedKitchen)?.price ?? 0;
 
   return (
     <div
@@ -421,65 +468,83 @@ export default function App() {
                 onSelectKitchen={setSelectedKitchen}
               />
             )}
-            {step === 6 && <Step6 />}
+            {step === 6 && (
+              <Step6
+                aduSizePrice={aduSizePrice}
+                roofStylePrice={roofStylePrice}
+                heightPrice={heightPrice}
+                roofOptionPrice={roofOptionPrice}
+                exteriorPrice={exteriorPrice}
+                appliancePrice={appliancePrice}
+                skylightPrice={skylightPrice}
+                windowCountPrice={windowCountPrice}
+                paintPrice={paintPrice}
+                flooringPrice={flooringPrice}
+                bathroomPrice={bathroomPrice}
+                curtainPrice={curtainPrice}
+                kitchenPrice={kitchenPrice}
+              />
+            )}
           </div>
         </div>
 
-        {step <= 5 && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "70px",
-            }}
-          >
-            {/* Back */}
-            <div>
-              {step > 1 && (
-                <button
-                  onClick={() => setStep(step - 1)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "14px 24px",
-                    background: "#fff",
-                    border: "1px solid #E5E7EB",
-                    borderRadius: "12px",
-                    cursor: "pointer",
-                    fontSize: "18px",
-                    fontWeight: 600,
-                    color: "#12254A",
-                    boxShadow: "0 2px 10px rgba(0,0,0,.05)",
-                  }}
-                >
-                  ← Back
-                </button>
-              )}
-            </div>
-
-            {/* Next */}
-            <button
-              onClick={() => setStep(step + 1)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "14px 32px",
-                background: "#12254A",
-                color: "#fff",
-                border: "none",
-                borderRadius: "12px",
-                cursor: "pointer",
-                fontSize: "18px",
-                fontWeight: 600,
-                boxShadow: "0 8px 20px rgba(18,37,74,.25)",
-              }}
-            >
-              Next →
-            </button>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "70px",
+          }}
+        >
+          {/* Back */}
+          <div>
+            {step > 1 && (
+              <button
+                onClick={() => setStep(step - 1)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "14px 24px",
+                  background: "#fff",
+                  border: "1px solid #E5E7EB",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  color: "#12254A",
+                  boxShadow: "0 2px 10px rgba(0,0,0,.05)",
+                }}
+              >
+                ← Back
+              </button>
+            )}
           </div>
-        )}
+
+          {/* Next */}
+          <div>
+            {step < 6 && (
+              <button
+                onClick={() => setStep(step + 1)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "14px 32px",
+                  background: "#12254A",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  boxShadow: "0 8px 20px rgba(18,37,74,.25)",
+                }}
+              >
+                Next →
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -959,7 +1024,7 @@ function Step3({
         <input
           type="range"
           min={0}
-          max={6}
+          max={5}
           value={skylights}
           onChange={(e) => onSkylightsChange(Number(e.target.value))}
           style={{ flex: 1 }}
@@ -981,7 +1046,7 @@ function Step3({
 
         <input
           type="range"
-          min={0}
+          min={4}
           max={8}
           value={windows}
           onChange={(e) => onWindowsChange(Number(e.target.value))}
@@ -1240,6 +1305,149 @@ function Step5({ kitchen = [], selectedKitchen, onSelectKitchen }: Step5Props) {
   );
 }
 
-function Step6() {
-  return <div>toal : -</div>;
+function Step6({
+  aduSizePrice,
+  roofStylePrice,
+  heightPrice,
+  roofOptionPrice,
+  exteriorPrice,
+  appliancePrice,
+  skylightPrice,
+  windowCountPrice,
+  paintPrice,
+  flooringPrice,
+  bathroomPrice,
+  curtainPrice,
+  kitchenPrice,
+}: Step6Props) {
+  const total =
+    aduSizePrice +
+    roofStylePrice +
+    heightPrice +
+    roofOptionPrice +
+    exteriorPrice +
+    appliancePrice +
+    skylightPrice +
+    windowCountPrice +
+    paintPrice +
+    flooringPrice +
+    bathroomPrice +
+    curtainPrice +
+    kitchenPrice;
+
+  const money = (price: number) => `$${price.toLocaleString()}`;
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: "30px",
+        width: "100%",
+      }}
+    >
+      {/* Summary */}
+      <div
+        style={{
+          flex: 1,
+          border: "1px solid #E5E7EB",
+          borderRadius: "12px",
+          padding: "20px",
+        }}
+      >
+        <h2>Summary</h2>
+
+        <Row title="ADU Size" value={money(aduSizePrice)} />
+        <Row title="Roof Style" value={money(roofStylePrice)} />
+        <Row title="Height" value={money(heightPrice)} />
+        <Row title="Roof Options" value={money(roofOptionPrice)} />
+        <Row title="Exterior Finish" value={money(exteriorPrice)} />
+        <Row title="Appliance Package" value={money(appliancePrice)} />
+        <Row title="Skylights" value={money(skylightPrice)} />
+        <Row title="Windows" value={money(windowCountPrice)} />
+        <Row title="Paint" value={money(paintPrice)} />
+        <Row title="Flooring" value={money(flooringPrice)} />
+        <Row title="Bathroom" value={money(bathroomPrice)} />
+        <Row title="Curtain / Doors" value={money(curtainPrice)} />
+        <Row title="Cabinets" value={money(kitchenPrice)} />
+
+        <hr />
+
+        <Row title="Total" value={money(total)} bold />
+      </div>
+
+      {/* Price Card */}
+      <div
+        style={{
+          width: "360px",
+          border: "1px solid #E5E7EB",
+          borderRadius: "12px",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900"
+          style={{
+            width: "100%",
+            height: "220px",
+            objectFit: "cover",
+          }}
+        />
+
+        <div
+          style={{
+            padding: "25px",
+            textAlign: "center",
+          }}
+        >
+          <p>Total Estimated Price</p>
+
+          <h1>{money(total)}</h1>
+
+          <p>
+            This is your estimated price. Final price may vary based on site
+            conditions and customizations.
+          </p>
+
+          <button
+            style={{
+              width: "100%",
+              padding: "16px",
+              background: "#102A56",
+              color: "#fff",
+              border: "none",
+              borderRadius: "10px",
+              fontSize: "20px",
+              cursor: "pointer",
+            }}
+          >
+            Get My Quote →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Row({
+  title,
+  value,
+  bold = false,
+}: {
+  title: string;
+  value: string;
+  bold?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: "10px",
+        fontWeight: bold ? 700 : 500,
+      }}
+    >
+      <span>{title}</span>
+      <span>{value}</span>
+    </div>
+  );
 }
