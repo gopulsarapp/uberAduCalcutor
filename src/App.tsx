@@ -204,7 +204,7 @@ export default function App() {
       price: "$7,500",
       priceAmount: 7500,
       image:
-        "https://ik.imagekit.io/gjohujjliy/cf676f30-43ba-4691-ab23-9a268314c16d.png",
+        "https://framerusercontent.com/images/dCvBXK0DqZAqN6mxLfCbqkENGQ8.jpg",
     },
   ];
 
@@ -284,7 +284,7 @@ export default function App() {
       price: 4500,
     },
   ];
-  console.log("hello world");
+
   const exteriors = [
     {
       id: "ext1",
