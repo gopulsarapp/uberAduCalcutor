@@ -196,7 +196,7 @@ export default function App() {
       price: "$0",
       priceAmount: 0,
       image:
-        "https://ik.imagekit.io/gjohujjliy/d92c6b54-8b10-4447-b2f6-36975f7f3509.png",
+        "https://framerusercontent.com/images/vQPF2k7MnpMUfEjj1lXeTtKr3M.png",
     },
     {
       id: 2,
@@ -1227,19 +1227,22 @@ function Step4({
 
 function Step5({ kitchen = [], selectedKitchen, onSelectKitchen }: Step5Props) {
   const isMobile = window.innerWidth <= 768;
+  const selectedKitchenItem = kitchen.find(
+    (item) => String(item.id) === String(selectedKitchen),
+  );
 
   return (
+    <div>
     <div
       style={{
         width: "100%",
-        maxWidth: "700px",
         margin: "0 auto",
+               maxWidth: "700px",
         padding: isMobile ? "10px" : "0",
         boxSizing: "border-box",
       }}
     >
       {/* Label */}
-
       <label
         style={{
           display: "block",
@@ -1251,9 +1254,7 @@ function Step5({ kitchen = [], selectedKitchen, onSelectKitchen }: Step5Props) {
       >
         Cabinets & Countertops
       </label>
-
       {/* Select */}
-
       <select
         value={selectedKitchen}
         onChange={(e) => onSelectKitchen(e.target.value)}
@@ -1265,7 +1266,7 @@ function Step5({ kitchen = [], selectedKitchen, onSelectKitchen }: Step5Props) {
           borderRadius: "12px",
           outline: "none",
           background: "#fff",
-          color: "#102A56",
+          color: "#102A56",         
           cursor: "pointer",
           boxSizing: "border-box",
           minHeight: "54px",
@@ -1277,88 +1278,213 @@ function Step5({ kitchen = [], selectedKitchen, onSelectKitchen }: Step5Props) {
           </option>
         ))}
       </select>
-
-      {/* Info Box */}
-
-      <div
-        style={{
-          marginTop: "30px",
-          background: "#EEF4FF",
-          border: "1px solid #DCE8FF",
-          borderRadius: "16px",
-          padding: isMobile ? "18px" : "24px",
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row",
-          alignItems: "center",
-          gap: "20px",
-          textAlign: isMobile ? "center" : "left",
-        }}
-      >
-        {/* Icon */}
-
-        <svg
-          width={isMobile ? "50" : "60"}
-          height={isMobile ? "50" : "60"}
-          viewBox="0 0 64 64"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+    </div>
+    
+     {selectedKitchenItem?.id === "kz" && (
+        <div
+          style={{
+            marginTop: "30px",
+            background: "#EEF4FF",
+            border: "1px solid #DCE8FF",
+            borderRadius: "16px",
+            padding: isMobile ? "18px" : "24px",
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            alignItems: "center",
+            gap: "20px",
+            textAlign: isMobile ? "center" : "left",
+          }}
         >
-          <path d="M10 28L32 10L54 28" stroke="#2952A3" strokeWidth="2" />
-          <path d="M15 25V54H49V25" stroke="#2952A3" strokeWidth="2" />
-          <rect
-            x="27"
-            y="36"
-            width="10"
-            height="18"
-            stroke="#2952A3"
-            strokeWidth="2"
-          />
-          <rect
-            x="19"
-            y="32"
-            width="6"
-            height="6"
-            stroke="#2952A3"
-            strokeWidth="2"
-          />
-          <rect
-            x="39"
-            y="32"
-            width="6"
-            height="6"
-            stroke="#2952A3"
-            strokeWidth="2"
-          />
-        </svg>
+          {/* Icon */}
 
-        {/* Text */}
-
-        <div>
-          <p
-            style={{
-              margin: 0,
-              fontSize: isMobile ? "18px" : "22px",
-              color: "#2952A3",
-              fontWeight: 700,
-            }}
+          <svg
+            width={isMobile ? "50" : "60"}
+            height={isMobile ? "50" : "60"}
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            High-quality Cabinets & Countertops
-          </p>
+            <path d="M10 28L32 10L54 28" stroke="#2952A3" strokeWidth="2" />
+            <path d="M15 25V54H49V25" stroke="#2952A3" strokeWidth="2" />
+            <rect
+              x="27"
+              y="36"
+              width="10"
+              height="18"
+              stroke="#2952A3"
+              strokeWidth="2"
+            />
+            <rect
+              x="19"
+              y="32"
+              width="6"
+              height="6"
+              stroke="#2952A3"
+              strokeWidth="2"
+            />
+            <rect
+              x="39"
+              y="32"
+              width="6"
+              height="6"
+              stroke="#2952A3"
+              strokeWidth="2"
+            />
+          </svg>
 
-          <p
-            style={{
-              marginTop: "8px",
-              marginBottom: 0,
-              fontSize: isMobile ? "15px" : "17px",
-              color: "#2952A3",
-              lineHeight: "26px",
-            }}
-          >
-            Enhance both style and functionality with premium cabinets and
-            countertops for a beautiful and durable kitchen.
-          </p>
+          {/* Text */}
+
+          <div>
+            <p
+              style={{
+                margin: 0,
+                fontSize: isMobile ? "18px" : "22px",
+                color: "#2952A3",
+                fontWeight: 700,
+              }}
+            >
+              High-quality Cabinets & Countertops
+            </p>
+
+            <p
+              style={{
+                marginTop: "8px",
+                marginBottom: 0,
+                fontSize: isMobile ? "15px" : "17px",
+                color: "#2952A3",
+                lineHeight: "26px",
+              }}
+            >
+              Enhance both style and functionality with premium cabinets and
+              countertops for a beautiful and durable kitchen.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
+
+      {selectedKitchenItem?.id === "island" && (
+        <div
+          style={{
+            marginTop: "30px",
+            background: "#F8FAFF",
+            border: "1px solid #DCE8FF",
+            borderRadius: "18px",
+            padding: isMobile ? "16px" : "20px",
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            gap: isMobile ? "18px" : "24px",
+            alignItems: "center",
+            boxSizing: "border-box",
+            width: "100%",
+          }}
+        >
+          {/* Image */}
+          <div
+            style={{
+              width: isMobile ? "100%" : "320px",
+              flexShrink: 0,
+            }}
+          >
+            <img
+              src="https://ik.imagekit.io/gjohujjliy/ChatGPT%20Image%20Aug%202,%202026,%2009_04_45%20PM.png"
+              alt="Kitchen Island"
+              style={{
+                width: "100%",
+                height: isMobile ? "220px" : "200px",
+                objectFit: "cover",
+                borderRadius: "14px",
+                display: "block",
+              }}
+            />
+          </div>
+
+          {/* Content */}
+          <div
+            style={{
+              flex: 1,
+              width: "100%",
+            }}
+          >
+            <h2
+              style={{
+                margin: 0,
+                color: "#102A56",
+                fontSize: isMobile ? "24px" : "38px",
+                fontWeight: 700,
+                lineHeight: 1.2,
+              }}
+            >
+              Kitchen Island - $3,500
+            </h2>
+
+            <p
+              style={{
+                marginTop: "12px",
+                color: "#4B5E7A",
+                fontSize: isMobile ? "15px" : "18px",
+                lineHeight: 1.7,
+                marginBottom: "24px",
+              }}
+            >
+              Add a stylish and functional kitchen island for extra workspace,
+              seating, and additional storage.
+            </p>
+
+            {/* Features */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: isMobile ? "14px" : "20px",
+                justifyContent: isMobile ? "center" : "flex-start",
+              }}
+            >
+              {[
+                {
+                  icon: "🛠",
+                  title: "Extra Workspace",
+                },
+                {
+                  icon: "🪑",
+                  title: "Seating Area",
+                },
+                {
+                  icon: "🗄",
+                  title: "Additional Storage",
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  style={{
+                    flex: isMobile ? "1 1 100%" : "1 1 180px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "12px 16px",
+                    background: "#fff",
+                    border: "1px solid #E6ECFA",
+                    borderRadius: "12px",
+                    minWidth: isMobile ? "100%" : "170px",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <span style={{ fontSize: "24px" }}>{item.icon}</span>
+
+                  <span
+                    style={{
+                      fontSize: isMobile ? "15px" : "16px",
+                      fontWeight: 600,
+                      color: "#102A56",
+                    }}
+                  >
+                    {item.title}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1697,9 +1823,7 @@ function CardTop({ step, totalStep }: CardTopProps) {
                     width: current ? "18px" : "14px",
                     height: current ? "18px" : "14px",
                     borderRadius: "50%",
-                    border: current
-                      ? "4px solid #102A56"
-                      : "3px solid #D7D9DE",
+                    border: current ? "4px solid #102A56" : "3px solid #D7D9DE",
                     background: "#fff",
                     boxSizing: "border-box",
                     flexShrink: 0,
