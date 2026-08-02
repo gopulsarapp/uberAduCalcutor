@@ -1594,7 +1594,7 @@ function Step6({
         }}
       >
         <img
-          src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900"
+          src="https://framerusercontent.com/images/wZLSsdYtspWfj8OBCv2MBDNpVs.jpg"
           alt="ADU"
           style={{
             width: "100%",
