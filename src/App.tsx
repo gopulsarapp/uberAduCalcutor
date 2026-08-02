@@ -284,7 +284,7 @@ export default function App() {
       price: 4500,
     },
   ];
-
+  console.log("hello world");
   const exteriors = [
     {
       id: "ext1",
