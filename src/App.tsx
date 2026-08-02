@@ -1646,7 +1646,7 @@ function CardTop({ step, totalStep }: CardTopProps) {
     <div
       style={{
         width: "100%",
-        marginBottom: "25px",
+        marginBottom: "30px",
       }}
     >
       <div
@@ -1655,11 +1655,11 @@ function CardTop({ step, totalStep }: CardTopProps) {
           flexDirection: isMobile ? "column" : "row",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: isMobile ? "15px" : "0",
-          width: "100%",
+          gap: isMobile ? "18px" : "0",
         }}
       >
-        {/* Left */}
+        {/* Step Text */}
+
         <div
           style={{
             width: isMobile ? "100%" : "140px",
@@ -1669,75 +1669,62 @@ function CardTop({ step, totalStep }: CardTopProps) {
           <p
             style={{
               margin: 0,
-              fontSize: isMobile ? "16px" : "18px",
+              fontSize: "18px",
               fontWeight: 700,
               color: "#102A56",
             }}
           >
-            Step {step} of <b>{totalStep}</b>
+            Step {step} of {totalStep}
           </p>
         </div>
 
-        {/* Center Progress */}
+        {/* Progress */}
+
         <div
           style={{
-            width: isMobile ? "100%" : "320px",
+            width: isMobile ? "100%" : "330px",
             display: "flex",
             alignItems: "center",
           }}
         >
-          {Array.from({ length: totalStep }).map((_, index) => (
-            <React.Fragment key={index}>
-              <div
-                style={{
-                  width: isMobile ? "14px" : "16px",
-                  height: isMobile ? "14px" : "16px",
-                  borderRadius: "50%",
-                  background: step > index ? "#0E2A5C" : "#fff",
-                  border:
-                    step > index
-                      ? "2px solid #0E2A5C"
-                      : "2px solid #D5D8DE",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexShrink: 0,
-                }}
-              >
-                {step > index && (
+          {Array.from({ length: totalStep }).map((_, index) => {
+            const current = step - 1 === index;
+
+            return (
+              <React.Fragment key={index}>
+                <div
+                  style={{
+                    width: current ? "18px" : "14px",
+                    height: current ? "18px" : "14px",
+                    borderRadius: "50%",
+                    border: current
+                      ? "4px solid #102A56"
+                      : "3px solid #D7D9DE",
+                    background: "#fff",
+                    boxSizing: "border-box",
+                    flexShrink: 0,
+                    transition: ".3s",
+                  }}
+                />
+
+                {index < totalStep - 1 && (
                   <div
                     style={{
-                      width: "7px",
-                      height: "7px",
-                      borderRadius: "50%",
-                      background: "#fff",
+                      flex: 1,
+                      height: "3px",
+                      background: "#D7D9DE",
+                      margin: "0",
                     }}
                   />
                 )}
-              </div>
-
-              {index < totalStep - 1 && (
-                <div
-                  style={{
-                    flex: 1,
-                    height: "3px",
-                    background:
-                      step > index + 1 ? "#0E2A5C" : "#D5D8DE",
-                  }}
-                />
-              )}
-            </React.Fragment>
-          ))}
+              </React.Fragment>
+            );
+          })}
         </div>
 
-        {/* Right Spacer */}
-        {!isMobile && (
-          <div
-            style={{
-              width: "140px",
-            }}
-          />
-        )}
+        {/* Spacer */}
+
+        {!isMobile && <div style={{ width: "140px" }} />}
       </div>
     </div>
   );
