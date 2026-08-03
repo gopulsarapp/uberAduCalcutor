@@ -1526,17 +1526,17 @@ function Step6({
 
   const money = (price: number) => `$${price.toLocaleString()}`;
 
-const sendQuote = async () => {
-  if (!email.trim()) {
-    alert("Please enter your email.");
-    return;
-  }
+  const sendQuote = async () => {
+    if (!email.trim()) {
+      alert("Please enter your email.");
+      return;
+    }
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    // HTML email for customer
-    const html = `
+    try {
+      // HTML email for customer
+      const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1628,42 +1628,42 @@ const sendQuote = async () => {
       </html>
     `;
 
-    // Send customer email
-    const emailRes = await fetch(
-      "https://api.emailjs.com/api/v1.0/email/send",
-      {
+      // Send customer email
+      const emailRes = await fetch(
+        "https://api.emailjs.com/api/v1.0/email/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            service_id: "service_r8z0tpa",
+            template_id: "template_pgqd95b",
+            user_id: "B1mWYLB3oNX7r91kM",
+            template_params: {
+              user_email: email,
+              message: html,
+            },
+          }),
+        },
+      );
+
+      if (!emailRes.ok) {
+        throw new Error("Failed to send customer email");
+      }
+
+      // Notify company
+      const web3Res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          service_id: "service_r8z0tpa",
-          template_id: "template_pgqd95b",
-          user_id: "B1mWYLB3oNX7r91kM",
-          template_params: {
-            user_email: email,
-            message: html,
-          },
-        }),
-      }
-    );
-
-    if (!emailRes.ok) {
-      throw new Error("Failed to send customer email");
-    }
-
-    // Notify company
-    const web3Res = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        access_key: "9327e176-9863-413d-9fb5-d202e7b14388",
-        subject: "New Customer Quote",
-        from_name: "ADU Configurator",
-        email: "mailtouberadu@gmail.com",
-        message: `
+          access_key: "9327e176-9863-413d-9fb5-d202e7b14388",
+          subject: "New Customer Quote",
+          from_name: "ADU Configurator",
+          email: "mailtouberadu@gmail.com",
+          message: `
 Customer Email: ${email}
 
 ADU Size: $${aduSizePrice}
@@ -1683,21 +1683,21 @@ Kitchen: $${kitchenPrice}
 ------------------------------------
 TOTAL: $${total}
         `,
-      }),
-    });
+        }),
+      });
 
-    if (!web3Res.ok) {
-      throw new Error("Failed to notify company");
+      if (!web3Res.ok) {
+        throw new Error("Failed to notify company");
+      }
+
+      setSuccess(true);
+    } catch (error) {
+      alert("Failed to send quote.");
+    } finally {
+      setLoading(false);
     }
-
-    setSuccess(true);
-  } catch (error) {
-    alert("Failed to send quote.");
-  } finally {
-    setLoading(false);
-  }
-};
-console.log("hello");
+  };
+  console.log("hello");
   return (
     <div
       style={{
