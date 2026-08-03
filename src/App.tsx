@@ -1525,39 +1525,72 @@ function Step6({
     kitchenPrice;
 
   const money = (price: number) => `$${price.toLocaleString()}`;
+
   const sendQuote = async () => {
-    if (!email.trim()) {
-      alert("Please enter your email.");
+    if (!email) {
+      alert("Please enter your email");
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
+    setLoading(true);
 
     try {
-      setLoading(true);
+      // Customer HTML Email
+      const html = generateHtmlQuote(); // your HTML string
 
-      // const response = await fetch("http://localhost:5000/api/send-quote", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     email,
-      //     total,
-      //   }),
-      // });
+      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          service_id: "service_r8z0tpa",
+          template_id: "template_pgqd95b",
+          user_id: "B1mWYLB3oNX7r91kM",
+          template_params: {
+            user_email: email,
+            message: html,
+          },
+        }),
+      });
 
-      // if (!response.ok) {
-      //   throw new Error("Failed");
-      // }
+      // Company Notification
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "9327e176-9863-413d-9fb5-d202e7b14388",
+          subject: "New Customer Quote",
+          from_name: "ADU Configurator",
+          email: "mailtouberadu@gmail.com",
+          message: `
+Customer Email: ${email}
+
+ADU Size: $${aduSizePrice}
+Roof Style: $${roofStylePrice}
+Height: $${heightPrice}
+Roof Options: $${roofOptionPrice}
+Exterior: $${exteriorPrice}
+Appliance: $${appliancePrice}
+Skylights: $${skylightPrice}
+Windows: $${windowCountPrice}
+Paint: $${paintPrice}
+Flooring: $${flooringPrice}
+Bathroom: $${bathroomPrice}
+Curtain & Doors: $${curtainPrice}
+Kitchen: $${kitchenPrice}
+
+--------------------------------
+TOTAL: $${total}
+        `,
+        }),
+      });
 
       setSuccess(true);
     } catch (err) {
+      console.error(err);
       alert("Failed to send quote.");
     } finally {
       setLoading(false);
