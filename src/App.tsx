@@ -1233,54 +1233,54 @@ function Step5({ kitchen = [], selectedKitchen, onSelectKitchen }: Step5Props) {
 
   return (
     <div>
-    <div
-      style={{
-        width: "100%",
-        margin: "0 auto",
-               maxWidth: "700px",
-        padding: isMobile ? "10px" : "0",
-        boxSizing: "border-box",
-      }}
-    >
-      {/* Label */}
-      <label
-        style={{
-          display: "block",
-          marginBottom: "12px",
-          fontSize: isMobile ? "16px" : "18px",
-          fontWeight: 600,
-          color: "#102A56",
-        }}
-      >
-        Cabinets & Countertops
-      </label>
-      {/* Select */}
-      <select
-        value={selectedKitchen}
-        onChange={(e) => onSelectKitchen(e.target.value)}
+      <div
         style={{
           width: "100%",
-          padding: isMobile ? "14px 16px" : "16px 18px",
-          fontSize: isMobile ? "15px" : "17px",
-          border: "1px solid #D9DEE8",
-          borderRadius: "12px",
-          outline: "none",
-          background: "#fff",
-          color: "#102A56",         
-          cursor: "pointer",
+          margin: "0 auto",
+          maxWidth: "700px",
+          padding: isMobile ? "10px" : "0",
           boxSizing: "border-box",
-          minHeight: "54px",
         }}
       >
-        {kitchen.map((item) => (
-          <option key={item.id} value={item.id}>
-            {item.name} - ${item.price.toLocaleString()}
-          </option>
-        ))}
-      </select>
-    </div>
-    
-     {selectedKitchenItem?.id === "kz" && (
+        {/* Label */}
+        <label
+          style={{
+            display: "block",
+            marginBottom: "12px",
+            fontSize: isMobile ? "16px" : "18px",
+            fontWeight: 600,
+            color: "#102A56",
+          }}
+        >
+          Cabinets & Countertops
+        </label>
+        {/* Select */}
+        <select
+          value={selectedKitchen}
+          onChange={(e) => onSelectKitchen(e.target.value)}
+          style={{
+            width: "100%",
+            padding: isMobile ? "14px 16px" : "16px 18px",
+            fontSize: isMobile ? "15px" : "17px",
+            border: "1px solid #D9DEE8",
+            borderRadius: "12px",
+            outline: "none",
+            background: "#fff",
+            color: "#102A56",
+            cursor: "pointer",
+            boxSizing: "border-box",
+            minHeight: "54px",
+          }}
+        >
+          {kitchen.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name} - ${item.price.toLocaleString()}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedKitchenItem?.id === "kz" && (
         <div
           style={{
             marginTop: "30px",
@@ -1504,6 +1504,9 @@ function Step6({
   curtainPrice,
   kitchenPrice,
 }: Step6Props) {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const isMobile = window.innerWidth <= 768;
 
   const total =
@@ -1522,7 +1525,44 @@ function Step6({
     kitchenPrice;
 
   const money = (price: number) => `$${price.toLocaleString()}`;
+  const sendQuote = async () => {
+    if (!email.trim()) {
+      alert("Please enter your email.");
+      return;
+    }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // const response = await fetch("http://localhost:5000/api/send-quote", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     email,
+      //     total,
+      //   }),
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error("Failed");
+      // }
+
+      setSuccess(true);
+    } catch (err) {
+      alert("Failed to send quote.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div
       style={{
@@ -1587,7 +1627,7 @@ function Step6({
         style={{
           width: isMobile ? "100%" : "360px",
           border: "1px solid #E5E7EB",
-          borderRadius: "16px",
+          borderRadius: "18px",
           overflow: "hidden",
           background: "#fff",
           boxShadow: "0 10px 30px rgba(0,0,0,.08)",
@@ -1613,7 +1653,7 @@ function Step6({
             style={{
               margin: 0,
               color: "#6B7280",
-              fontSize: "16px",
+              fontSize: "15px",
             }}
           >
             Total Estimated Price
@@ -1624,6 +1664,7 @@ function Step6({
               margin: "15px 0",
               color: "#102A56",
               fontSize: isMobile ? "34px" : "42px",
+              fontWeight: 700,
             }}
           >
             {money(total)}
@@ -1632,30 +1673,58 @@ function Step6({
           <p
             style={{
               color: "#6B7280",
-              lineHeight: "26px",
+              lineHeight: "25px",
               fontSize: "15px",
+              marginBottom: "20px",
             }}
           >
             This is an estimated project cost. Final pricing may vary depending
-            on site conditions, permits, and customization options.
+            on permits, site conditions and customization options.
           </p>
 
+          {!success && (
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address"
+              style={{
+                width: "100%",
+                padding: "15px",
+                border: "1px solid #D1D5DB",
+                borderRadius: "12px",
+                fontSize: "16px",
+                outline: "none",
+                boxSizing: "border-box",
+                marginBottom: "18px",
+              }}
+            />
+          )}
+
           <button
+            onClick={sendQuote}
+            disabled={loading || success}
             style={{
               width: "100%",
-              marginTop: "25px",
               padding: "16px",
-              background: "#102A56",
+              background: success ? "#81b54c" : "#102A56",
               color: "#fff",
               border: "none",
               borderRadius: "12px",
-              fontSize: "18px",
+              fontSize: "17px",
               fontWeight: 600,
-              cursor: "pointer",
-              boxShadow: "0 8px 20px rgba(16,42,86,.25)",
+              cursor: loading || success ? "default" : "pointer",
+              transition: "all .3s ease",
+              boxShadow: success
+                ? "0 10px 25px rgba(129,181,76,.35)"
+                : "0 10px 25px rgba(16,42,86,.25)",
             }}
           >
-            Get My Quote →
+            {loading
+              ? "Sending..."
+              : success
+                ? "Quote Sent Successfully"
+                : "Send Quote"}
           </button>
         </div>
       </div>
