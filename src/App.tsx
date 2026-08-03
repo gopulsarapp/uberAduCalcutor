@@ -1526,19 +1526,112 @@ function Step6({
 
   const money = (price: number) => `$${price.toLocaleString()}`;
 
-  const sendQuote = async () => {
-    if (!email) {
-      alert("Please enter your email");
-      return;
-    }
+const sendQuote = async () => {
+  if (!email.trim()) {
+    alert("Please enter your email.");
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      // Customer HTML Email
-      const html = generateHtmlQuote(); // your HTML string
+  try {
+    // HTML email for customer
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8" />
+      </head>
+      <body style="font-family:Arial,sans-serif;background:#f4f6f8;padding:30px;">
+        <div style="max-width:600px;margin:auto;background:#fff;border-radius:12px;padding:25px;">
+          <h2 style="color:#102A56;">ADU Price Summary</h2>
 
-      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+          <table width="100%" cellpadding="8" cellspacing="0">
+            <tr>
+              <td>ADU Size</td>
+              <td align="right">$${aduSizePrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Roof Style</td>
+              <td align="right">$${roofStylePrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Height</td>
+              <td align="right">$${heightPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Roof Options</td>
+              <td align="right">$${roofOptionPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Exterior</td>
+              <td align="right">$${exteriorPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Appliance</td>
+              <td align="right">$${appliancePrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Skylights</td>
+              <td align="right">$${skylightPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Windows</td>
+              <td align="right">$${windowCountPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Paint</td>
+              <td align="right">$${paintPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Flooring</td>
+              <td align="right">$${flooringPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Bathroom</td>
+              <td align="right">$${bathroomPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Curtain & Doors</td>
+              <td align="right">$${curtainPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td>Kitchen</td>
+              <td align="right">$${kitchenPrice.toLocaleString()}</td>
+            </tr>
+
+            <tr>
+              <td colspan="2">
+                <hr />
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>Total</strong></td>
+              <td align="right"><strong>$${total.toLocaleString()}</strong></td>
+            </tr>
+          </table>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // Send customer email
+    const emailRes = await fetch(
+      "https://api.emailjs.com/api/v1.0/email/send",
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1552,20 +1645,25 @@ function Step6({
             message: html,
           },
         }),
-      });
+      }
+    );
 
-      // Company Notification
-      await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          access_key: "9327e176-9863-413d-9fb5-d202e7b14388",
-          subject: "New Customer Quote",
-          from_name: "ADU Configurator",
-          email: "mailtouberadu@gmail.com",
-          message: `
+    if (!emailRes.ok) {
+      throw new Error("Failed to send customer email");
+    }
+
+    // Notify company
+    const web3Res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        access_key: "9327e176-9863-413d-9fb5-d202e7b14388",
+        subject: "New Customer Quote",
+        from_name: "ADU Configurator",
+        email: "mailtouberadu@gmail.com",
+        message: `
 Customer Email: ${email}
 
 ADU Size: $${aduSizePrice}
@@ -1582,20 +1680,24 @@ Bathroom: $${bathroomPrice}
 Curtain & Doors: $${curtainPrice}
 Kitchen: $${kitchenPrice}
 
---------------------------------
+------------------------------------
 TOTAL: $${total}
         `,
-        }),
-      });
+      }),
+    });
 
-      setSuccess(true);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to send quote.");
-    } finally {
-      setLoading(false);
+    if (!web3Res.ok) {
+      throw new Error("Failed to notify company");
     }
-  };
+
+    setSuccess(true);
+  } catch (error) {
+    alert("Failed to send quote.");
+  } finally {
+    setLoading(false);
+  }
+};
+console.log("hello");
   return (
     <div
       style={{
